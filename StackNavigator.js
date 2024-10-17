@@ -13,6 +13,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import SearchScreen from './Screens/SearchScreen';
+import Search2Screen from './Screens/Search2Screen';
+import PlacesScreen from './Screens/PlacesScreen';
 
 
 
@@ -108,7 +110,9 @@ const StackNavigator = () => {
     <NavigationContainer>
         <Stack.Navigator>
            <Stack.Screen name="Main" component={BottomTabs} options={{headerShown:false}}/>
-           <Stack.Screen name="Search" component={SearchScreen} options={{headerShown:false}} />
+           <Stack.Screen name="Search" component={SearchScreen} options={{headerShown:false}}/>
+           <Stack.Screen name="Search2" component={Search2Screen} options={{headerShown:false}}/>
+           <Stack.Screen name="Places" component={PlacesScreen} options={{headerShown:false}}/>
         </Stack.Navigator>
     </NavigationContainer>
  );

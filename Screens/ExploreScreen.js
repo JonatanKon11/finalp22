@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TextInput } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, TextInput, Pressable } from 'react-native'
 import React, { useLayoutEffect } from 'react'
 import Header from '../components/Header'
 import Cards from '../components/Cards'
@@ -10,6 +10,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 
 const ExploreScreen = () => {
+    
     const navigation = useNavigation();
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -56,7 +57,13 @@ const ExploreScreen = () => {
                style={{color:"black", fontSize:16}} placeholder='  where you want to go?'/>
          </View>
         </View>
-         <Header/>   
+         <Header/> 
+         <Pressable>
+            <Pressable>
+
+            </Pressable>
+
+         </Pressable>  
         <ScrollView>
     
 

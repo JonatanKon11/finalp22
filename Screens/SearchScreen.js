@@ -1,21 +1,22 @@
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View,SafeAreaView, Button } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View,SafeAreaView, Button, Image, Alert } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import DatePicker from 'react-native-date-ranges';
 import Header from '../components/Header';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { BottomModal, ModalButton, ModalContent, ModalFooter, SlideAnimation, ModalTitle } from 'react-native-modals';
 
 const SearchScreen = () => {
   const navigation = useNavigation();
   const [selectedDates,setSelectedDates] = useState();
+  const route = useRoute()
   const [rooms, setRooms] = useState(1);
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [modalVisible,setModalVisible]= useState(false);
-  console.log(selectedDates)
+ 
   useLayoutEffect(() => {
       navigation.setOptions({
           headerShown: true,
@@ -35,7 +36,7 @@ const SearchScreen = () => {
           )
 
       })
-  },[])
+  },[]);
 
   const customButton = (onConfirm) => {
   return(
@@ -51,15 +52,63 @@ const SearchScreen = () => {
 
     );
   };
+
+  console.log(route.params)
+
+  const searchPlaces = (place) => {
+    if(!route.params || !selectedDates){
+      Alert.alert(
+        "Invalide Details",
+        "Please enter all the details",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        {cancelable: false}
+      )
+    }
+
+    if(route.params && selectedDates){
+      navigation.navigate("Places",{
+        rooms:rooms,
+        adults:adults,
+        children:children,
+        selectedDates:selectedDates,
+        place:place,
+      })
+    }
+  };
   return (
     <>
     <SafeAreaView>
       <ScrollView>
         <View style={{margin:20, borderColor:"black", borderWidth:1, borderRadius:5}}>
+
+
           {/*Destination */}
-          <Pressable style={{flexDirection:"row",alignItems:"center",gap:10,paddingHorizontal:10,borderColor:"black",borderWidth:2,paddingVertical:15, }}>
+          <Pressable
+           onPress={() => navigation.navigate("Search2")}
+            style={{
+              flexDirection:"row",
+              alignItems:"center",
+              gap:10,
+              paddingHorizontal:10,
+              borderColor:"black",
+              borderWidth:2,
+              paddingVertical:15, 
+              }}
+          >
           <AntDesign name="search1" size={24} color="black" />
-          <TextInput placeholderTextColor="black" placeholder='Enter your Destination'/>
+          <TextInput 
+          placeholderTextColor="black" 
+          placeholder={
+             route?.params ? route.params.input : "Enter Your Destination"
+          } 
+          />
           </Pressable>
            {/* selected dates */}
           <Pressable style={{flexDirection:"row",alignItems:"center",gap:10,paddingHorizontal:10,borderColor:"black",borderWidth:2,paddingVertical:15,  }}>
@@ -75,11 +124,11 @@ const SearchScreen = () => {
                 fontSize:15,flexDirection:"row",alignItems:"center",marginRight:"auto"
               }
           } } // optional 
-            selectedBgColor="0047AB"
+            selectedBgColor="#FF5A5F"
             customButton={(onConfirm) => customButton(onConfirm)}
             onConfirm={(startDate,endDates) => setSelectedDates(startDate,endDates)}
             allowFontScaling = {false} // optional
-            placeholder={'Apr 27, 2018 → Jul 10, 2018'}
+            placeholder={"Select Your Dates"}
             mode={'range'}
             />
           </Pressable>
@@ -91,12 +140,29 @@ const SearchScreen = () => {
           <TextInput  placeholderTextColor="red" placeholder="1 room - 2 adults - 0 children"/>
           </Pressable>
           {/*search buttom */}
-          <Pressable style={{paddingHorizontal:10,borderColor:"black",borderWidth:2,paddingVertical:15,backgroundColor:"#fd5c63"}}>
+          <Pressable 
+          onPress ={() => searchPlaces(route?.params.input)}
+          style={{paddingHorizontal:10,borderColor:"black",borderWidth:2,paddingVertical:15,backgroundColor:"#fd5c63"}}>
               <Text style={{color:"white", textAlign:"center", fontSize:15, fontWeight:"500"}}>Search</Text>
           </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
+
+    <Pressable
+    style={{
+      marginTop:200,
+      justifyContent:"center",
+      alignItems:"center",
+    }}
+    >
+      <Image
+        style={{width: 200, height:62, resizeMode:"cover" }}
+        source={{
+          uri: "https://www.edigitalagency.com.au/wp-content/uploads/airbnb-logo-png-transparent-background-1200x375.png",
+        }}
+      />
+    </Pressable>
 
     <BottomModal 
     swipeThreshold={200} 
